@@ -1,19 +1,3 @@
-## Open and build
-
-Open `NetKit.xcodeproj` in Xcode and select the shared `NetKit` scheme. The iOS targets require iOS 17.0 or later. Select your development team for physical device deployment; shared entitlements may also require registering the App Group in your account.
-
-The Swift Package remains the source distribution. The Xcode framework target includes a hostless test target; run `swift test` for the existing offline networking tests.
-
-```bash
-xcodebuild -project NetKit.xcodeproj -scheme NetKit -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
-```
-
-### Repository organization
-
-Swift files stay under `Sources/` with Xcode groups matching the physical folders. Assets and entitlements are under `Resources/`. Libraries retain `Package.swift`; their demo and tests have separate target membership. Shared schemes are committed; personal Xcode state and build outputs are ignored. The app icon catalog contains a slot for final artwork.
-
-This repository is private. Swift Package consumers must authenticate with GitHub. Use the `main` branch until a versioned release is created.
-
 <div align="center">
 
 # 📦 NetKit
@@ -28,11 +12,21 @@ This repository is private. Swift Package consumers must authenticate with GitHu
 
 ---
 
+## Open and build
+
+Open `NetKit.xcodeproj` in Xcode and select the shared `NetKit` scheme. The Xcode framework target requires iOS 17.0 or later. The Swift Package manifest supports iOS 16 and macOS 13 or later.
+
+The Swift Package remains the source distribution. The Xcode framework target includes a hostless test target; run `swift test` for the existing offline networking tests.
+
+```bash
+xcodebuild -project NetKit.xcodeproj -scheme NetKit -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+```
+
 ## ✨ Overview
 
 **NetKit** is a tiny, reusable networking layer designed for production iOS apps. It packs everything you need — type-safe endpoints, actor-isolation for thread safety, pluggable interceptors, structured errors — and nothing you don't. Drop it into any app via Swift Package Manager.
 
-This is your **open-source library** repo — perfect signal that you write reusable code, not just app code.
+This repository is private. Authenticate with GitHub when resolving it as a Swift Package; use the `main` branch until a versioned release is created.
 
 ---
 
@@ -40,7 +34,7 @@ This is your **open-source library** repo — perfect signal that you write reus
 
 - 🔒 **Type-safe `Endpoint<Response>`** — compiler-enforced response type
 - 🧵 **Actor-isolated `HTTPClient`** — thread-safe by construction
-- 🔌 **Pluggable interceptors** — auth, logging, retry, telemetry
+- 🔌 **Pluggable interceptor protocol** — built-in authentication and logging; custom implementations can extend request handling
 - 🚨 **Typed errors** — `invalidURL`, `transport`, `decoding`, `httpStatus`
 - ✅ Built-in **Bearer token** interceptor
 - 📜 Built-in **OSLog** interceptor for debugging
@@ -75,7 +69,6 @@ struct GitHubUser: Decodable {
 let client = HTTPClient(
     baseURL: URL(string: "https://api.github.com")!,
     interceptors: [
-        BearerTokenInterceptor { await TokenStore.shared.current },
         LoggingInterceptor()
     ]
 )
