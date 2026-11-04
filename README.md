@@ -140,7 +140,6 @@ NetKit/
 - **Why generic `Endpoint<Response>`?** The compiler enforces "this endpoint returns this type"; no casts in client code.
 - **Why protocol-based interceptors?** Anyone can write a `RetryInterceptor`, `OfflineCacheInterceptor`, etc., without modifying NetKit.
 - **Why no Combine?** async/await is the future and avoids Combine's memory-management pitfalls.
-- **Why no third-party deps?** Easy to audit, easy to update, no transitive risk.
 
 ---
 
